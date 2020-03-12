@@ -1,0 +1,34 @@
+server:
+  port: 9090
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: example
+          uri: lb://example
+          predicates:
+            - Path= /**
+    loadbalancer:
+      ribbon:
+        enabled: true
+    consul:
+      host: 127.0.0.1
+      port: 8500
+      discovery:
+        health-check-interval: 2s
+        health-check-critical-timeout: 1m
+        health-check-timeout: 2s
+        tags: secure=true
+        fail-fast: true
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://localhost:3306/gatewaypfe?serverTimezone=UTC
+    username: root
+    password:
+  application:
+    name: demo
+  main:
+    allow-bean-definition-overriding: true
