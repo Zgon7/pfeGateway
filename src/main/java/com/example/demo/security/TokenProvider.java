@@ -1,5 +1,6 @@
 package com.example.demo.security;
 
+import com.example.demo.model.CustomUserDetails;
 import io.jsonwebtoken.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,10 +38,12 @@ public class TokenProvider {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
-    private String createToken(Map<String, Object> claims, String subject){
+    private String createToken(Map<String, Object> claims, String subject, UserDetails userdetails){
+        String authorties = userdetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining());
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
+                .claim("scopes", authorties)
                 .setIssuedAt(new Date(System.currentTimeMillis() ))
                 .setExpiration(new Date(System.currentTimeMillis() + VALIDITY_TIME))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
@@ -48,7 +51,7 @@ public class TokenProvider {
 
     public String generateToken(UserDetails userDetails){
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+        return createToken(claims, userDetails.getUsername(), userDetails);
     }
 
     public Boolean validateToken(String token, UserDetails userDetails){
