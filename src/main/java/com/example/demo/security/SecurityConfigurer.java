@@ -43,6 +43,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter  {
                         "/api/users"
                         ,"/api/signup"
                         ,"/api/**"
+                        ,"/karim/**"
+                        ,"/**"
                         ,"/api/category/categoryById/**"
                         ,"/api/products/list"
                         , "/api/products/product/**")
@@ -52,6 +54,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter  {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        // http.addFilterAfter(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
 

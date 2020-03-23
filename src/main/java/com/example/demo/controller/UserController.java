@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,8 @@ public class UserController {
     private ModelMapper modelMapper = new ModelMapper();
 
     @GetMapping("users")
-    public List<User> findAll(){
+    public List<User> findAll(HttpServletResponse response){
+        // response.setHeader("username", "karim");
         List<User> users =  customUserDetailsService.findAll();
         List<UserDTO> userDTOS = new ArrayList<>();
         users.forEach(u -> {
